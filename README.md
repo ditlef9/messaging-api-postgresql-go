@@ -1,12 +1,13 @@
 # Messages API that uses Postgresql developed in Go
 
-A API that gets messages from a PostgreSQL database table with attachments
+A API that gets messages from a PostgreSQL database table with attachments.
 
 ---
 
 🔥 Cool Features
 * Fetch Mastodon posts and store them in PostgreSQL
 * Supports media attachments
+* Has user authentication
 --- 
 
 
