@@ -1,0 +1,40 @@
+name: Security for GIN - SCA for GO with Snyk and DAST for web with OWASP ZAP
+
+# Use 'workflow_dispatch' to enable manual triggering of this workflow
+on:
+  workflow_dispatch:
+    inputs:
+      run_snyk_scan:
+        description: 'Run Snyk SCA Scan'
+        required: true
+        default: 'false'
+        type: boolean
+      run_zap_scan:
+        description: 'Run OWASP ZAP DAST Scan'
+        required: true
+        default: 'false'
+        type: boolean
+
+jobs:
+  sca_scan:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.run_snyk_scan == 'true' }}
+    name: SCA (Software Composition Analysis) with Snyk
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/go@v1
+        with:
+          project-name: "messages-api-postgresql-go"
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  dast_scan:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.run_zap_scan == 'true' }}
+    name: DAST (Dynamic Application Security Testing) with OWASP ZAP
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.10.0
+        with:
+          target: 'https://URL-OF-API.com'
